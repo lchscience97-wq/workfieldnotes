@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Site self-check</title>
+<style>
+:root{--ok:#1a7f4b;--bad:#b3261e;--warn:#a8631a;--mute:#6b7280;--rule:#e5e7eb}
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#fcfbf8;color:#101a24;
+  font:15px/1.55 ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif}
+h1{font-size:21px;margin:0 0 4px}
+.sub{color:var(--mute);font-size:13px;margin:0 0 18px}
+#verdict{padding:16px 18px;border-radius:8px;font-size:19px;font-weight:700;margin:0 0 18px}
+.v-run{background:#eef2f7;color:#334}
+.v-ok{background:#e7f6ee;color:var(--ok)}
+.v-bad{background:#fdeceb;color:var(--bad)}
+h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);
+  margin:26px 0 8px;font-weight:700}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+td.u{font-family:ui-monospace,Menlo,monospace;font-size:12px;word-break:break-all}
+.ok{color:var(--ok);font-weight:700}
+.bad{color:var(--bad);font-weight:700}
+.warn{color:var(--warn);font-weight:700}
+#bar{height:6px;background:var(--rule);border-radius:3px;overflow:hidden;margin:0 0 18px}
+#bar > i{display:block;height:100%;width:0;background:#a8431a;transition:width .2s}
+button{font:inherit;font-weight:700;padding:9px 16px;border:1px solid #101a24;
+  background:#101a24;color:#fff;border-radius:6px;cursor:pointer}
+.note{background:#f4f1e9;border-left:3px solid #a8431a;padding:12px 14px;font-size:13px;margin:18px 0}
+</style>
+</head>
+<body>
+
+<h1>Site self-check</h1>
+<p class="sub">Reads sitemap.xml and audits every page it lists. Works for 3 pages or 705 &#8212; nothing to update as you publish.</p>
+
+<div id="verdict" class="v-run">Running&#8230;</div>
+<div id="bar"><i></i></div>
+
+<div id="out"></div>
+
+<div class="note">
+  <p>This page is <strong>noindex</strong> and is not in the sitemap, so it will not
+  appear in search results. Re-run any time after publishing.</p>
+</div>
+
+<p><button onclick="location.reload()">Run again</button></p>
+
+<script>
+(function(){
+  var O = document.getElementById('out'),
+      V = document.getElementById('verdict'),
+      B = document.querySelector('#bar > i');
+  var fails = 0, warns = 0, done = 0, total = 1;
+
+  function esc(s){ return String(s).replace(/[<>&]/g, function(c){
+    return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c]; }); }
+
+  function sect(title){
+    var h = document.createElement('h2'); h.textContent = title; O.appendChild(h);
+    var t = document.createElement('table');
+    t.innerHTML = '<tr><th style="width:52%">Check</th><th style="width:12%">Result</th><th>Detail</th></tr>';
+    O.appendChild(t); return t;
+  }
+  function row(t, name, state, detail){
+    var tr = document.createElement('tr');
+    var cls = state === true ? 'ok' : (state === 'warn' ? 'warn' : 'bad');
+    var mark = state === true ? 'PASS' : (state === 'warn' ? 'WARN' : 'FAIL');
+    if (state === false) fails++;
+    if (state === 'warn') warns++;
+    tr.innerHTML = '<td class="u">' + esc(name) + '</td><td class="' + cls + '">' + mark +
+                   '</td><td>' + (detail ? esc(detail) : '') + '</td>';
+    t.appendChild(tr);
+  }
+  function tick(){ done++; B.style.width = Math.min(100, done / total * 100) + '%'; }
+
+  function get(url){
+    return fetch(url, {cache:'no-store'}).then(function(r){
+      return r.text().then(function(txt){
+        return {ok:r.ok, status:r.status, redirected:r.redirected, url:r.url, text:txt};
+      });
+    }).catch(function(e){ return {ok:false, status:0, error:String(e), text:''}; });
+  }
+
+  function pool(items, worker, size){
+    var i = 0, out = [];
+    function next(){
+      if (i >= items.length) return Promise.resolve();
+      var k = i++;
+      return worker(items[k]).then(function(r){ out[k] = r; return next(); });
+    }
+    var runners = [];
+    for (var n = 0; n < Math.min(size, items.length || 1); n++) runners.push(next());
+    return Promise.all(runners).then(function(){ return out; });
+  }
+
+  var tInfra = sect('1 · Infrastructure');
+  var locs = [];
+
+  get('/sitemap.xml').then(function(r){
+    if (!r.ok) { row(tInfra, '/sitemap.xml reachable', false, 'HTTP ' + r.status); finish(); return; }
+    row(tInfra, '/sitemap.xml reachable', true, 'HTTP 200');
+    var doc = new DOMParser().parseFromString(r.text, 'application/xml');
+    var bad = doc.querySelector('parsererror');
+    row(tInfra, 'sitemap.xml is valid XML', !bad, bad ? 'parse error' : '');
+    var nodes = doc.getElementsByTagName('loc');
+    for (var i = 0; i < nodes.length; i++) locs.push(nodes[i].textContent.trim());
+    row(tInfra, 'sitemap URL count', locs.length > 0, locs.length + ' URLs');
+    var dotHtml = locs.filter(function(u){ return /\.html$/.test(u); });
+    row(tInfra, 'sitemap has no .html URLs', dotHtml.length === 0,
+        dotHtml.length ? dotHtml.length + ' found (these redirect)' : 'clean');
+    var dup = locs.length !== new Set(locs).size;
+    row(tInfra, 'sitemap has no duplicate URLs', !dup, dup ? 'duplicates present' : '');
+    return runPages();
+  });
+
+  get('/robots.txt').then(function(r){
+    row(tInfra, '/robots.txt reachable', r.ok, 'HTTP ' + r.status);
+    row(tInfra, 'robots.txt declares Sitemap', /Sitemap:\s*https?:\/\//i.test(r.text),
+        (r.text.match(/Sitemap:.*/i) || [''])[0].trim());
+  });
+
+  get('/.git/config').then(function(r){
+    row(tInfra, '/.git/ blocked (must be 404)', r.status === 404, 'HTTP ' + r.status);
+  });
+
+  get('/style.css').then(function(r){
+    row(tInfra, '/style.css reachable', r.ok, 'HTTP ' + r.status + ' · ' + r.text.length + ' bytes');
+  });
+
+  get('/no-such-page-xyz').then(function(r){
+    row(tInfra, 'unknown URL returns 404 page', r.status === 404 && /Work/i.test(r.text),
+        'HTTP ' + r.status);
+  });
+
+  function runPages(){
+    if (!locs.length) { finish(); return; }
+    total = locs.length;
+    var tPages = sect('2 · Every page in the sitemap (' + locs.length + ')');
+    var sections = [];
+
+    return pool(locs, function(loc){
+      var path = loc.replace(/^https?:\/\/[^/]+/, '') || '/';
+      return get(path).then(function(r){
+        tick();
+        var probs = [];
+        if (!r.ok) probs.push('HTTP ' + r.status);
+        if (r.redirected) probs.push('redirected to ' + r.url.replace(/^https?:\/\/[^/]+/, ''));
+        if (r.ok) {
+          var d = new DOMParser().parseFromString(r.text, 'text/html');
+          var can = d.querySelector('link[rel=canonical]');
+          if (!can) probs.push('no canonical');
+          else {
+            var cp = can.getAttribute('href').replace(/^https?:\/\/[^/]+/, '');
+            if (cp !== path) probs.push('canonical mismatch: ' + cp);
+          }
+          if (r.text.indexOf('G-JHYBQ9031Y') < 0) probs.push('no GA4 tag');
+          if (d.querySelectorAll('h1').length !== 1) probs.push('h1 count ' + d.querySelectorAll('h1').length);
+          if (!d.querySelector('meta[name=description]')) probs.push('no meta description');
+          if (/noindex/i.test(r.text)) probs.push('has noindex');
+          var isArticle = /^\/[^/]+\/[^/]+$/.test(path);
+          if (isArticle) {
+            var ads = d.querySelectorAll('.ad').length;
+            if (ads !== 4) probs.push('ad slots ' + ads);
+            if (!d.querySelector('.record')) probs.push('no record card');
+            if (!d.querySelector('.sources')) probs.push('no sources');
+            var ld = d.querySelectorAll('script[type="application/ld+json"]').length;
+            if (ld < 2) probs.push('JSON-LD blocks ' + ld);
+            var det = d.querySelectorAll('details').length;
+            var faq = 0;
+            d.querySelectorAll('script[type="application/ld+json"]').forEach(function(s){
+              try { var j = JSON.parse(s.textContent);
+                    if (j['@type'] === 'FAQPage') faq = j.mainEntity.length; } catch(e){}
+            });
+            if (faq !== det) probs.push('FAQ schema ' + faq + ' vs details ' + det);
+          }
+          if (/^\/[^/]+\/$/.test(path)) sections.push({path:path, doc:d});
+        }
+        row(tPages, path, probs.length === 0, probs.join(' · '));
+        return {path:path, ok:probs.length === 0};
+      });
+    }, 6).then(function(){ return runLinks(sections); });
+  }
+
+  function runLinks(sections){
+    var tL = sect('3 · Section pages link to their articles');
+    var arts = locs.map(function(l){ return l.replace(/^https?:\/\/[^/]+/, ''); })
+                   .filter(function(p){ return /^\/[^/]+\/[^/]+$/.test(p); });
+    if (!sections.length) row(tL, 'section pages found', 'warn', 'none checked');
+    sections.forEach(function(s){
+      var want = arts.filter(function(a){ return a.indexOf(s.path) === 0; });
+      var have = [].slice.call(s.doc.querySelectorAll('a')).map(function(a){
+        return (a.getAttribute('href') || '').replace(/^https?:\/\/[^/]+/, ''); });
+      var missing = want.filter(function(a){ return have.indexOf(a) < 0; });
+      if (!want.length) row(tL, s.path, 'warn', 'no articles published yet');
+      else row(tL, s.path + '  (' + want.length + ' articles)', missing.length === 0,
+               missing.length ? 'missing links: ' + missing.join(', ') : 'all linked');
+    });
+    finish();
+  }
+
+  function finish(){
+    B.style.width = '100%';
+    if (V.className !== 'v-run') return;
+    if (fails === 0 && warns === 0) {
+      V.className = 'v-ok'; V.textContent = 'ALL CLEAR \u2014 no problems found';
+    } else if (fails === 0) {
+      V.className = 'v-ok'; V.textContent = 'PASS \u2014 ' + warns + ' warning(s), 0 failures';
+    } else {
+      V.className = 'v-bad'; V.textContent = fails + ' PROBLEM(S) FOUND \u2014 see red rows below';
+    }
+  }
+
+  setTimeout(finish, 45000);
+})();
+</script>
+</body>
+</html>
