@@ -1,0 +1,49 @@
+# Work Field Notes
+
+> An independent reference site for the United States. Each page answers one question completely, so a reader does not need a second source to act. Every figure comes from a dated primary source, and that source is named and linked on the page it appears on.
+
+Sources are limited to primary institutions: the Bureau of Labor Statistics, the Centers for Medicare and Medicaid Services, the Electronic Code of Federal Regulations, the HHS Office of Inspector General, the HHS Office for Civil Rights, the Health Resources and Services Administration, the Office of the National Coordinator for Health Information Technology, the National Center for Education Statistics, the Centers for Disease Control and Prevention, and HealthCare.gov.
+
+No page gives clinical, legal or financial advice. Where a question requires that kind of judgment, the page names the agency, regulator or licensed professional who holds the authority to answer it, and states the deadline or threshold that applies. Pages carry a record card showing the verification date, the jurisdiction, and the reference period of the data used.
+
+Publishing and editorial responsibility rests with C. H. Lee.
+
+## Health Information and Careers
+
+- [Health Information Professionals](https://workfieldnotes.com/health/health-information-professionals): Which roles exist in health information management, what credentials employers ask for, and what each pays.
+- [Health Care in the United States](https://workfieldnotes.com/health/health-care): How coverage, payment and delivery fit together, and which body decides what at each step.
+- [My Health](https://workfieldnotes.com/health/my-health): How patient portals work and how to exercise the HIPAA right of access to your own record.
+- [Health Care Administrator](https://workfieldnotes.com/health/health-care-administrator): What the job involves day to day, which state licence applies to nursing home administrators, and what it pays.
+- [Health Care Solutions](https://workfieldnotes.com/health/health-care-solutions): What vendors mean by the phrase and which claims in a sales document can be checked independently.
+- [Health Care Administration Salary](https://workfieldnotes.com/health/health-care-administration-salary): The full wage distribution for medical and health services managers and how it differs by work setting.
+- [Health Care Insurance Companies](https://workfieldnotes.com/health/health-care-insurance-companies): Who actually pays a claim, and why the entity on the letterhead is often not the one deciding.
+- [Health Care Equipment Near Me](https://workfieldnotes.com/health/health-care-equipment-near-me): How to check a durable medical equipment supplier before ordering, and which records establish what.
+- [Health Care Gov Phone Number](https://workfieldnotes.com/health/health-care-gov-phone-number): The official federal telephone lines sorted by task, and the impersonation patterns that cluster around them.
+- [Health Care for the Homeless](https://workfieldnotes.com/health/health-care-for-the-homeless): What the programme is, who qualifies, and how the sliding fee scale is set.
+- [Health Care Lawyer](https://workfieldnotes.com/health/health-care-lawyer): Six distinct jobs share the title; which one fits a given problem, and the free route below 125 per cent of the poverty guidelines.
+- [Health Care Consultant](https://workfieldnotes.com/health/health-care-consultant): No federal occupation code carries this title, which is why quoted salaries for it scatter.
+- [Health Care Lawyers Near Me](https://workfieldnotes.com/health/health-care-lawyers-near-me): State admission rather than distance decides who may represent you, and which problems an agency settles free of charge.
+- [Health Care Administration Degree](https://workfieldnotes.com/health/health-care-administration-degree): Five credentials lead to the same title under four accreditors, at prices that differ by more than 30,000 dollars.
+- [Health Care Administration Jobs](https://workfieldnotes.com/health/health-care-administration-jobs): Where the 616,200 jobs sit by industry, which employer pays most, and the annual turnover rate behind the vacancies.
+- [Health Care Near Me](https://workfieldnotes.com/health/health-care-near-me): Which care setting is legally obliged to see you, which can decline, and what drives the cost at each.
+- [Health Care Network](https://workfieldnotes.com/health/health-care-network): The phrase names both an insurance contract and a clinic group; what the regulated version must contain.
+- [Health Care Provider](https://workfieldnotes.com/health/health-care-provider): HIPAA and Medicare define the word differently, and under Medicare rules a physician is a supplier rather than a provider.
+- [Health Care Jobs](https://workfieldnotes.com/health/health-care-jobs): The federal statistics split healthcare into two wage tiers separated by 45,910 dollars, with licensure as the boundary.
+- [Health Care Services](https://workfieldnotes.com/health/health-care-services): The ten benefit categories every Marketplace plan must cover, and the four industry subsectors that deliver them.
+- [Health Information Technology](https://workfieldnotes.com/health/health-information-technology-hit): How HIT, HIE, EHR and informatics differ, and which of them has a testable federal definition.
+- [Health Care Law](https://workfieldnotes.com/health/health-care-law): Ten separate federal statutes make up the field; who each one binds, and which two an individual can invoke directly.
+- [Health Care Management Salary](https://workfieldnotes.com/health/health-care-management-salary): Three occupation codes compete for the same job title, and the choice moves the median by 15,010 dollars.
+- [Health Information Exchange](https://workfieldnotes.com/health/health-information-exchange): The six TEFCA exchange purposes, and why three of them never appear in a HIPAA accounting of disclosures.
+- [Health Care or Healthcare](https://workfieldnotes.com/health/health-care-or-healthcare): Federal usage splits by system, with occupational classifications closing the compound and industry classifications keeping two words.
+- [Health Care Agency](https://workfieldnotes.com/health/health-care-agency): What Medicare certification produces in published evidence, and the volume thresholds that leave small agencies unrated.
+- [Health Care Clinic](https://workfieldnotes.com/health/health-care-clinic): Four legal forms share the word, and only some carry a sliding fee obligation or a federal encounter rate.
+
+## About This Site
+
+- [About](https://workfieldnotes.com/about): How guides are researched, which sources are accepted, and how figures are dated.
+- [Contact](https://workfieldnotes.com/contact): Where to send corrections and questions.
+
+## Optional
+
+- [Privacy Policy](https://workfieldnotes.com/privacy-policy): What data is collected, by whom, and how to opt out.
+- [Terms of Use](https://workfieldnotes.com/terms): The terms the site is published under and the limits of what it can be held to.
